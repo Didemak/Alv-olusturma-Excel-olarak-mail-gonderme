@@ -1,0 +1,74 @@
+<!DOCTY "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xht />
+<title>ZDAK_EGT_0023</title>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZDAK_EGT_0023</h2>
+<h3> Description: ÖDEV</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Report&nbsp;ZDAK_EGT_0023<br />
+*&---------------------------------------------------------------------*<br />
+*&<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+REPORT zdak_egt_0023.<br />
+TABLES: bseg,kna1,makt,bkpf.<br />
+<br />
+<br />
+include <a href ="zdak_egt_0023_top.html">zdak_egt_0023_top</a>.<br />
+include <a href ="zdak_egt_0023_frm.html">zdak_egt_0023_frm</a>.<br />
+<br />
+<br />
+START-OF-SELECTION.<br />
+<br />
+<br />
+&nbsp;&nbsp;PERFORM&nbsp;get_data.<br />
+&nbsp;&nbsp;PERFORM&nbsp;set_fc.<br />
+&nbsp;&nbsp;PERFORM&nbsp;set_layout.<br />
+&nbsp;&nbsp;PERFORM&nbsp;display_alv.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;PERFORM&nbsp;send_mail.<br />
+<br />
+<br />
+*&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;It_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_fieldcatalog<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_fieldcatalog-hotspot&nbsp;=&nbsp;select<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_list.<br />
+<br />
+<br />
+*&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_list&nbsp;ASSIGNING&nbsp;&lt;gfs_fcat&gt;.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&lt;gfs_fcat&gt;-fieldname&nbsp;EQ&nbsp;'KUNNR'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;gfs_fcat&gt;-hotspot&nbsp;=&nbsp;abap_true.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+<br />
+*Selection&nbsp;texts<br />
+*----------------------------------------------------------<br />
+*&nbsp;S_BLDAT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BELGE&nbsp;TARÝHÝ&nbsp;:<br />
+*&nbsp;S_BUKRS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ÞÝRKET&nbsp;KODU&nbsp;:<br />
+*&nbsp;S_GJAHR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MALÝ&nbsp;YIL&nbsp;:<br />
+*&nbsp;S_KUNNR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MÜÞTERÝ&nbsp;NUMARASI&nbsp;:<br />
+*&nbsp;S_NAME1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MÜÞTERÝ&nbsp;ADI&nbsp;:<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>

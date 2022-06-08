@@ -1,0 +1,129 @@
+<!DOCTY "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xht />
+<title>ZDAK_EGT_0023_TOP</title>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZDAK_EGT_0023_TOP</h2>
+<h3> Description: Include ZDAK_EGT_0023_TOP</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZDAK_EGT_0023_TOP<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+" merge, header line da inetnal table isteyen bir yapý bu sebeple onu tanýmladýk.<br />
+   </div>
+   <div class="codeComment">
+*DATA&nbsp;:&nbsp;BEGIN&nbsp;OF&nbsp;gt_list&nbsp;OCCURS&nbsp;0,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;belnr&nbsp;TYPE&nbsp;bkpf-belnr,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name1&nbsp;LIKE&nbsp;kna1-name1,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name2&nbsp;LIKE&nbsp;kna1-name2,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aufnr&nbsp;LIKE&nbsp;bseg-aufnr,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kunnr&nbsp;LIKE&nbsp;bseg-kunnr,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;LIKE&nbsp;bseg-matnr,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mwskz&nbsp;LIKE&nbsp;bseg-mwskz,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gjahr&nbsp;LIKE&nbsp;bseg-gjahr,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbeln&nbsp;LIKE&nbsp;bseg-vbeln,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;peinh&nbsp;LIKE&nbsp;bseg-peinh,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maktx&nbsp;LIKE&nbsp;makt-maktx,<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;meýns&nbsp;LIKE&nbsp;ekpo-meins,<br />
+*END&nbsp;OF&nbsp;gt_list.<br />
+   </div>
+   <div class="code">
+TYPES : BEGIN OF gty_list,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;belnr&nbsp;TYPE&nbsp;bkpf-belnr,&nbsp;"belge&nbsp;numarasý<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name1&nbsp;TYPE&nbsp;kna1-name1,&nbsp;"1.ad<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;aufnr&nbsp;TYPE&nbsp;bseg-aufnr,&nbsp;"sipariþ&nbsp;no<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kunnr&nbsp;TYPE&nbsp;bseg-kunnr,&nbsp;"müþteri&nbsp;numarasý<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matnr&nbsp;TYPE&nbsp;bseg-matnr,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gjahr&nbsp;TYPE&nbsp;bseg-gjahr,&nbsp;"mali&nbsp;yýl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vbeln&nbsp;TYPE&nbsp;bseg-vbeln,&nbsp;"faturalama&nbsp;belgesi<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;peinh&nbsp;TYPE&nbsp;bseg-peinh,&nbsp;"fiyat&nbsp;birimi<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bukrs&nbsp;TYPE&nbsp;bseg-bukrs,&nbsp;"þirket&nbsp;kodu<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buzeý&nbsp;TYPE&nbsp;bseg-buzeý,&nbsp;"kalem<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bldat&nbsp;TYPE&nbsp;bkpf-bldat,&nbsp;"belge&nbsp;tarihi<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END&nbsp;OF&nbsp;gty_list.<br />
+<br />
+<br />
+DATA : gt_list TYPE TABLE OF gty_list,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_list&nbsp;TYPE&nbsp;gty_list.<br />
+<br />
+<br />
+DATA : gt_fieldcatalog TYPE slis_t_fieldcat_alv, "fieldcat bir internal table<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_fieldcatalog&nbsp;TYPE&nbsp;slis_fieldcat_alv.<br />
+<br />
+DATA : gs_layout TYPE slis_layout_alv. "layout ise structur buyüzden table tipin oluþturmadý<br />
+<br />
+DATA : gt_events TYPE slis_t_event,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_event&nbsp;&nbsp;TYPE&nbsp;slis_alv_event.<br />
+<br />
+DATA : gt_sort TYPE slis_t_sortinfo_alv,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gs_sort&nbsp;TYPE&nbsp;&nbsp;slis_sortinfo_alv.<br />
+<br />
+DATA : lv_string      TYPE string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_data_string&nbsp;TYPE&nbsp;string,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_xstring&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;xstring,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_bin&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;solix_tab,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lt_body&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;soli_tab,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_body&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TYPE&nbsp;soli.<br />
+<br />
+DATA: lv_gun type char20.<br />
+   </div>
+   <div class="codeComment">
+*lv_gun&nbsp;=&nbsp;sy-datum.<br />
+<br />
+<br />
+*MESSAGE&nbsp;'Lütfen&nbsp;en&nbsp;az&nbsp;bir&nbsp;parametre&nbsp;giriniz&nbsp;!&nbsp;'&nbsp;TYPE&nbsp;'I'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;SELECTION-SCREEN&nbsp;BEGIN&nbsp;OF&nbsp;BLOCK&nbsp;b1&nbsp;WITH&nbsp;FRAME&nbsp;TITLE&nbsp;TEXT-001.<br />
+&nbsp;&nbsp;SELECT-OPTIONS&nbsp;s_kunnr&nbsp;FOR&nbsp;bseg-kunnr.&nbsp;"&nbsp;OBLIGATORY&nbsp;.<br />
+&nbsp;&nbsp;SELECT-OPTIONS&nbsp;s_name1&nbsp;FOR&nbsp;kna1-name1."&nbsp;obligatory&nbsp;.<br />
+&nbsp;&nbsp;SELECT-OPTIONS&nbsp;s_bukrs&nbsp;FOR&nbsp;bseg-bukrs."&nbsp;obligatory&nbsp;.<br />
+&nbsp;&nbsp;SELECT-OPTIONS&nbsp;s_gjahr&nbsp;FOR&nbsp;bseg-gjahr."&nbsp;obligatory&nbsp;.<br />
+&nbsp;&nbsp;SELECT-OPTIONS&nbsp;s_bldat&nbsp;FOR&nbsp;bkpf-bldat.&nbsp;"&nbsp;DEFAULT&nbsp;lv_gun.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;IF&nbsp;TEXT-001&nbsp;IS&nbsp;INITIAL.<br />
+*<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;s_kunnr&nbsp;&lt;&gt;&nbsp;space&nbsp;or&nbsp;&nbsp;s_name1&nbsp;=&nbsp;space&nbsp;and&nbsp;s_bukrs&nbsp;=&nbsp;space&nbsp;and&nbsp;&nbsp;s_gjahr&nbsp;=&nbsp;space.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'Müþteri&nbsp;numarasý&nbsp;boþ&nbsp;geçilemez&nbsp;!'&nbsp;TYPE&nbsp;'I'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;&nbsp;s_name1&nbsp;=&nbsp;space.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'Ýsim&nbsp;boþ&nbsp;geçilemez&nbsp;!'&nbsp;TYPE&nbsp;'I'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;s_bukrs&nbsp;=&nbsp;space.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'Þirket&nbsp;kodu&nbsp;boþ&nbsp;geçilemez&nbsp;!'&nbsp;TYPE&nbsp;'I'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;s_gjahr&nbsp;=&nbsp;space.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;'Mali&nbsp;yýl&nbsp;boþ&nbsp;geçilemez&nbsp;!'&nbsp;TYPE&nbsp;'I'&nbsp;DISPLAY&nbsp;LIKE&nbsp;'E'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXIT.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+<br />
+*&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="code">
+SELECTION-SCREEN END OF BLOCK b1.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>

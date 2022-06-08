@@ -1,0 +1,619 @@
+<!DOCTY "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xht />
+<title>ZDAK_EGT_0023_FRM</title>
+</head>
+<body>
+<table class="outerTable">
+  <tr class="normalBoldLarge">
+     <td><h2>Code listing for: ZDAK_EGT_0023_FRM</h2>
+<h3> Description: Include ZDAK_EGT_0023_FRM</h3></td>
+   </tr>
+  <tr>
+     <td>
+     <table class="innerTable">
+       <tr>
+          <td>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Include&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZDAK_EGT_0023_FRM<br />
+*&---------------------------------------------------------------------*<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;get_data<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+<br />
+   </div>
+   <div class="code">
+FORM get_data .<br />
+<br />
+&nbsp;&nbsp;SELECT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bseg~belnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kna1~name1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bseg~buzeý<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bseg~kunnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bseg~matnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bseg~bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bseg~gjahr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bseg~vbeln<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bseg~peinh<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bseg~aufnr<br />
+&nbsp;&nbsp;FROM&nbsp;bkpf<br />
+&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;bseg&nbsp;ON&nbsp;bseg~belnr&nbsp;EQ&nbsp;bkpf~belnr<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;AND&nbsp;bseg~gjahr&nbsp;EQ&nbsp;bkpf~gjahr&nbsp;AND&nbsp;bseg~bukrs&nbsp;EQ&nbsp;bkpf~bukrs<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;kna1&nbsp;ON&nbsp;kna1~kunnr&nbsp;EQ&nbsp;bseg~kunnr<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;INNER&nbsp;JOIN&nbsp;makt&nbsp;ON&nbsp;makt~matnr&nbsp;EQ&nbsp;bseg~matnr<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;INTO&nbsp;CORRESPONDING&nbsp;FIELDS&nbsp;OF&nbsp;TABLE&nbsp;gt_list<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHERE&nbsp;&nbsp;bseg~matnr&nbsp;NE&nbsp;space<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;bseg~kunnr&nbsp;NE&nbsp;space<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;bseg~kunnr&nbsp;IN&nbsp;s_kunnr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;kna1~name1&nbsp;IN&nbsp;s_name1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;bseg~bukrs&nbsp;IN&nbsp;s_bukrs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;bseg~gjahr&nbsp;IN&nbsp;s_gjahr<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AND&nbsp;bkpf~bldat&nbsp;IN&nbsp;s_bldat&nbsp;.<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;"VERÝNÝN&nbsp;ÇOKLANMAMASI&nbsp;ÝÇÝN&nbsp;KULLANILAN&nbsp;YAPI&nbsp;-&nbsp;COLLECT<br />
+&nbsp;&nbsp;&nbsp;DATA&nbsp;:&nbsp;lt_list_coll&nbsp;LIKE&nbsp;gt_list&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_list&nbsp;INTO&nbsp;gs_list.<br />
+&nbsp;&nbsp;&nbsp;COLLECT&nbsp;gs_list&nbsp;INTO&nbsp;lt_list_coll.<br />
+&nbsp;&nbsp;&nbsp;ENDLOOP.<br />
+&nbsp;&nbsp;&nbsp;REFRESH&nbsp;gt_list&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;gt_list&nbsp;=&nbsp;lt_list_coll&nbsp;.<br />
+<br />
+<br />
+ENDFORM.<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;set_fc<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM set_fc .<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_FIELDCATALOG_MERGE'<br />
+*&nbsp;&nbsp;&nbsp;EXPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_PROGRAM_NAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-repid<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_INTERNAL_TABNAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'GT_LIST'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_STRUCTURE_NAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'ZDAK_EGT_0023_S'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_INCLNAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-repid<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;CHANGING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ct_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_fieldcatalog&nbsp;.<br />
+<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;PERFORM&nbsp;:&nbsp;set_fc_sub&nbsp;USING&nbsp;'KUNNR'&nbsp;&nbsp;'MÜÞTERÝ&nbsp;NUMARASI'&nbsp;'MÜÞTERÝ&nbsp;NUMARASI'&nbsp;&nbsp;'MÜÞTERÝ&nbsp;NUMARASI'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abap_true&nbsp;'0'&nbsp;''&nbsp;''&nbsp;,&nbsp;&nbsp;"field&nbsp;catalog&nbsp;özlelliklerini&nbsp;bir&nbsp;yerde&nbsp;toplamak&nbsp;için&nbsp;perform&nbsp;set&nbsp;açýldý.&nbsp;ve&nbsp;buraya&nbsp;tanýmlandý<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set_fc_sub&nbsp;USING&nbsp;'BELNR'&nbsp;&nbsp;'BELGE&nbsp;NO'&nbsp;'BELGE&nbsp;NUMARASI'&nbsp;&nbsp;'BELGE&nbsp;NUMARASI'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'X'&nbsp;'1'&nbsp;''&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set_fc_sub&nbsp;USING&nbsp;'BUZEI'&nbsp;&nbsp;'KALEM'&nbsp;'KALEM'&nbsp;&nbsp;'KALEM'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;'2'&nbsp;''&nbsp;''&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set_fc_sub&nbsp;USING&nbsp;'NAME1'&nbsp;&nbsp;'MÜÞTERÝ&nbsp;ADI'&nbsp;'MÜÞTERÝ&nbsp;ADI'&nbsp;&nbsp;'MÜÞTERÝ&nbsp;ADI'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'3'&nbsp;''&nbsp;''&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set_fc_sub&nbsp;USING&nbsp;'MATNR'&nbsp;&nbsp;'MALZEME'&nbsp;'MALZEME'&nbsp;'MALZEME'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'4'&nbsp;''&nbsp;'X'&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set_fc_sub&nbsp;USING&nbsp;'GJAHR'&nbsp;&nbsp;'MALÝ&nbsp;YIL'&nbsp;'MALÝ&nbsp;YIL'&nbsp;'MALÝ&nbsp;YIL'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'5'&nbsp;''&nbsp;&nbsp;''&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set_fc_sub&nbsp;USING&nbsp;'VBELN'&nbsp;&nbsp;'FATURALAMA&nbsp;BELGESÝ'&nbsp;'FATURALAMA&nbsp;BELGESÝ'&nbsp;'FATURALAMA&nbsp;BELGESÝ'&nbsp;''&nbsp;&nbsp;'6'&nbsp;''&nbsp;''&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set_fc_sub&nbsp;USING&nbsp;'PEINH'&nbsp;&nbsp;'FÝYAT&nbsp;BÝRÝMÝ'&nbsp;'FÝYAT&nbsp;BÝRÝMÝ'&nbsp;'FÝYAT&nbsp;BÝRÝMÝ'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'7'&nbsp;'X'&nbsp;''&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set_fc_sub&nbsp;USING&nbsp;'AUFNR'&nbsp;&nbsp;'SÝPARÝÞ&nbsp;NO'&nbsp;'SÝPARÝÞ&nbsp;NO'&nbsp;'SÝPARÝÞ&nbsp;NO'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;''&nbsp;&nbsp;'8'&nbsp;''&nbsp;''&nbsp;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set_fc_sub&nbsp;USING&nbsp;'BUKRS'&nbsp;&nbsp;'ÞÝRKET&nbsp;KODU'&nbsp;'ÞÝRKET&nbsp;KODU'&nbsp;'ÞÝRKET&nbsp;KODU'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'X'&nbsp;'9'&nbsp;''&nbsp;''&nbsp;.<br />
+&nbsp;&nbsp;"&nbsp;abap_true&nbsp;yerine&nbsp;'X'&nbsp;de&nbsp;kullanýlabilinir.<br />
+&nbsp;&nbsp;"&nbsp;abap_false&nbsp;yerine&nbsp;''&nbsp;bu&nbsp;þekilde&nbsp;boþ&nbsp;da&nbsp;býrakýlabilinir.<br />
+<br />
+ENDFORM.<br />
+<br />
+FORM set_fc_sub USING p_fielname    "parametre olduðu anlaþýlsýn diye baþýna p koydum.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_seltext_s<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_seltext_m<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_seltext_l<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_key<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_col_pos<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_do_sum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p_hotspot.<br />
+&nbsp;&nbsp;CLEAR:&nbsp;gs_fieldcatalog.<br />
+&nbsp;&nbsp;gs_fieldcatalog-fieldname&nbsp;=&nbsp;p_fielname.<br />
+&nbsp;&nbsp;gs_fieldcatalog-seltext_s&nbsp;=&nbsp;p_seltext_s.<br />
+&nbsp;&nbsp;gs_fieldcatalog-seltext_M&nbsp;=&nbsp;p_seltext_m.<br />
+&nbsp;&nbsp;gs_fieldcatalog-seltext_L&nbsp;=&nbsp;p_seltext_l.<br />
+&nbsp;&nbsp;gs_fieldcatalog-key&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_key.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"key&nbsp;özelliði<br />
+&nbsp;&nbsp;gs_fieldcatalog-col_pos&nbsp;&nbsp;&nbsp;=&nbsp;p_col_pos.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"kolon&nbsp;sýrasý<br />
+&nbsp;&nbsp;gs_fieldcatalog-do_sum&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;p_do_sum.<br />
+&nbsp;&nbsp;gs_fieldcatalog-hotspot&nbsp;&nbsp;&nbsp;=&nbsp;p_hotspot.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;gs_fieldcatalog-outputlen=&nbsp;40.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"kolon&nbsp;geniþliði<br />
+*&nbsp;&nbsp;gs_fieldcatalog-edit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;abap_true&nbsp;.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;APPEND&nbsp;gs_fieldcatalog&nbsp;TO&nbsp;gt_fieldcatalog.<br />
+ENDFORM.<br />
+"bu özellikleri kullanabilmek için from set_fc ye tanýmlamamýz gerekiyor.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;set_layout<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM set_layout .<br />
+   </div>
+   <div class="codeComment">
+*LAYOUT<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;gs_layout-window_titlebar&nbsp;=&nbsp;'FATURA'&nbsp;.<br />
+&nbsp;&nbsp;"baþlýk&nbsp;eklendi&nbsp;bunun&nbsp;için&nbsp;önce&nbsp;layout&nbsp;structure&nbsp;ý&nbsp;açýldý&nbsp;daha&nbsp;sonra&nbsp;is_layout&nbsp;a&nbsp;atama&nbsp;yapýldý.<br />
+&nbsp;&nbsp;gs_layout-zebra&nbsp;=&nbsp;abap_true.<br />
+&nbsp;&nbsp;"satýrlar&nbsp;zebra&nbsp;görüntüsünde&nbsp;oldu.<br />
+&nbsp;&nbsp;gs_layout-colwidth_optimize&nbsp;=&nbsp;abap_true.<br />
+&nbsp;&nbsp;"kolon&nbsp;geniþliklerini&nbsp;en&nbsp;uygun&nbsp;þekilde&nbsp;optimize&nbsp;ederek&nbsp;ayarlar.<br />
+   </div>
+   <div class="codeComment">
+*gs_layout-edit&nbsp;=&nbsp;abap_true.<br />
+   </div>
+   <div class="code">
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;Form&nbsp;display_alv<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+*&&nbsp;--&gt;&nbsp;&nbsp;p1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&&nbsp;&lt;--&nbsp;&nbsp;p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text<br />
+*&---------------------------------------------------------------------*<br />
+   </div>
+   <div class="code">
+FORM display_alv .<br />
+&nbsp;&nbsp;IF&nbsp;sy-batch&nbsp;&lt;&gt;&nbsp;'X'.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_event-name&nbsp;=&nbsp;slis_ev_top_of_page.&nbsp;"kullanacaðým&nbsp;eventin&nbsp;id&nbsp;sini&nbsp;buraya&nbsp;yazacaðým<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_event-form&nbsp;=&nbsp;'TOP_OF_PAGE'.&nbsp;"buda&nbsp;oluþturmuþ&nbsp;olduðum&nbsp;formun&nbsp;adý&nbsp;olmasý&nbsp;lazým.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;gs_event&nbsp;TO&nbsp;gt_events.&nbsp;"APPEND&nbsp;yardýmýyla&nbsp;gt_events&nbsp;internal&nbsp;tablýmýza&nbsp;atýyoruz.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_event-name&nbsp;=&nbsp;slis_ev_end_of_list.&nbsp;"&nbsp;top&nbsp;of&nbsp;page&nbsp;in&nbsp;alt&nbsp;kýsmýnda&nbsp;gösterilen&nbsp;bir&nbsp;yapý<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_event-form&nbsp;=&nbsp;'END_OF_LIST'.&nbsp;"top&nbsp;of&nbsp;page&nbsp;deki&nbsp;gibi&nbsp;aþaðý&nbsp;kýsýmda&nbsp;boþluk&nbsp;çýkýyor.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;gs_event&nbsp;TO&nbsp;gt_events.<br />
+   </div>
+   <div class="codeComment">
+*<br />
+*&nbsp;&nbsp;gs_event-name&nbsp;=&nbsp;slis_ev_pf_status_set.<br />
+*&nbsp;&nbsp;gs_event-form&nbsp;=&nbsp;'PF_STATUS_SET'.<br />
+*&nbsp;&nbsp;APPEND&nbsp;gs_event&nbsp;TO&nbsp;gt_events.<br />
+<br />
+<br />
+<br />
+*SHORTLAMA&nbsp;(KALEM&nbsp;VE&nbsp;BELGE&nbsp;TABLOSU)<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;gs_sort-spos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1&nbsp;.&nbsp;"&nbsp;malzeme&nbsp;seçtin&nbsp;sortladýn&nbsp;daha&nbsp;sonra&nbsp;hangi&nbsp;diðer&nbsp;&nbsp;2.sine&nbsp;bakýcak&nbsp;sýralamasýný&nbsp;veren&nbsp;spos&nbsp;dur.&nbsp;Öncelik&nbsp;belirleme<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_sort-tabname&nbsp;&nbsp;&nbsp;=&nbsp;'GT_LIST'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_sort-fieldname&nbsp;=&nbsp;'BELNR'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_sort-up&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;abap_true&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;gs_sort&nbsp;TO&nbsp;gt_sort&nbsp;.<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_sort-spos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_sort-tabname&nbsp;&nbsp;&nbsp;=&nbsp;'GT_LIST'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_sort-fieldname&nbsp;=&nbsp;'BUZEI'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gs_sort-up&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;abap_true&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;APPEND&nbsp;gs_sort&nbsp;TO&nbsp;gt_sort&nbsp;.<br />
+<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;ALV&nbsp;BASMAK&nbsp;ÝÇÝN&nbsp;FOKSÝYONLARIMIZI&nbsp;ÇAÐIRDIK<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_GRID_DISPLAY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_INTERFACE_CHECK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_BYPASSING_BUFFER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_BUFFER_ACTIVE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_program&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;sy-repid&nbsp;"sy-repid&nbsp;hangi&nbsp;program&nbsp;içerisindeysen&nbsp;bunu&nbsp;dinamik&nbsp;olarak&nbsp;yakalýyordur.baþka&nbsp;bir&nbsp;formuda&nbsp;buraya&nbsp;entegre&nbsp;edebiliyorum&nbsp;anlamýna&nbsp;geliyor.burada&nbsp;formu&nbsp;belirtmem&nbsp;yeterli&nbsp;olmuyor&nbsp;yukarýya&nbsp;programýn&nbsp;adýný&nbsp;yazmam<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_pf_status_set&nbsp;=&nbsp;'PF_STATUS_SET'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_user_command&nbsp;&nbsp;=&nbsp;'USER_COMMAND'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_callback_top_of_page&nbsp;&nbsp;&nbsp;=&nbsp;'TOP_OF_PAGE'&nbsp;"farklý&nbsp;bir&nbsp;isim&nbsp;de&nbsp;verilebilinir&nbsp;ancak&nbsp;form&nbsp;çalýþýyor&nbsp;mu&nbsp;diye&nbsp;bakmak&nbsp;için&nbsp;ayný&nbsp;ismi&nbsp;verdim.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_CALLBACK_HTML_TOP_OF_PAGE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;''<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_CALLBACK_HTML_END_OF_LIST&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_STRUCTURE_NAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_BACKGROUND_ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_GRID_TITLE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_GRID_SETTINGS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is_layout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gs_layout<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_fieldcat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_fieldcatalog<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT_EXCLUDING&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT_SPECIAL_GROUPS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_sort&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_sort<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT_FILTER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IS_SEL_HIDE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_DEFAULT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'X'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_SAVE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'&nbsp;'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IS_VARIANT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_events&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_events<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT_EVENT_EXIT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IS_PRINT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IS_REPREP_ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_SCREEN_START_COLUMN&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_SCREEN_START_LINE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_SCREEN_END_COLUMN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_SCREEN_END_LINE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_HTML_HEIGHT_TOP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_HTML_HEIGHT_END&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;0<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT_ALV_GRAPHICS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT_HYPERLINK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT_ADD_FIELDCAT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IT_EXCEPT_QINFO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IR_SALV_FULLSCREEN_ADAPTER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;O_PREVIOUS_SRAL_HANDLER&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;E_EXIT_CAUSED_BY_CALLER&nbsp;&nbsp;=<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ES_EXIT_CAUSED_BY_USER&nbsp;&nbsp;&nbsp;=<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;t_outtab&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;gt_list.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXCEPTIONS<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PROGRAM_ERROR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;1<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OTHERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;2<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;IF&nbsp;sy-subrc&nbsp;&lt;&gt;&nbsp;0.<br />
+*&nbsp;Implement&nbsp;suitable&nbsp;error&nbsp;handling&nbsp;here<br />
+*&nbsp;&nbsp;ENDIF.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;ENDIF.<br />
+ENDFORM.<br />
+<br />
+<br />
+FORM top_of_page .<br />
+&nbsp;&nbsp;DATA&nbsp;:&nbsp;lt_header&nbsp;TYPE&nbsp;slis_t_listheader,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_header&nbsp;TYPE&nbsp;slis_listheader.<br />
+&nbsp;&nbsp;DATA&nbsp;:&nbsp;lv_date&nbsp;TYPE&nbsp;char10.<br />
+&nbsp;&nbsp;DATA&nbsp;:&nbsp;lv_lines&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_lines_c&nbsp;TYPE&nbsp;char4.<br />
+<br />
+&nbsp;&nbsp;CLEAR:&nbsp;ls_header.&nbsp;"birdan&nbsp;fazla&nbsp;structure&nbsp;kullanýlacaksa&nbsp;clear&nbsp;ý&nbsp;kullanýn.<br />
+&nbsp;&nbsp;ls_header-typ&nbsp;=&nbsp;'H'.<br />
+&nbsp;&nbsp;ls_header-info&nbsp;=&nbsp;'Fatura&nbsp;Sipariþ&nbsp;Raporu'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_header&nbsp;TO&nbsp;lt_header.&nbsp;"Append&nbsp;ile&nbsp;internal&nbsp;table&nbsp;a&nbsp;atýyoruz.<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;CLEAR:&nbsp;ls_header.<br />
+&nbsp;&nbsp;ls_header-typ&nbsp;=&nbsp;'S'.<br />
+&nbsp;&nbsp;ls_header-key&nbsp;=&nbsp;'Tarih'.<br />
+   </div>
+   <div class="codeComment">
+*ls_header-info&nbsp;=&nbsp;'16.05.2021'.&nbsp;sabit&nbsp;bir&nbsp;þekilde&nbsp;tarih&nbsp;geliyor.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;"birleþtir<br />
+&nbsp;&nbsp;CONCATENATE&nbsp;sy-datum+6(2)&nbsp;"baþtan&nbsp;6&nbsp;nýn&nbsp;2&nbsp;si<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sy-datum+4(2)&nbsp;"baþtan&nbsp;4&nbsp;ün&nbsp;2&nbsp;si<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sy-datum+0(4)&nbsp;"baþtan&nbsp;4&nbsp;ü&nbsp;aldýk.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;lv_date.<br />
+&nbsp;&nbsp;ls_header-info&nbsp;=&nbsp;lv_date.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_header&nbsp;TO&nbsp;lt_header.<br />
+<br />
+&nbsp;&nbsp;"sy-datum&nbsp;=&nbsp;'20210516'.&nbsp;yapýsý&nbsp;yýlaygün&nbsp;bunu&nbsp;istediðimiz&nbsp;günayyýl&nbsp;formatýna&nbsp;çevircez.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;CLEAR:&nbsp;ls_header.<br />
+*&nbsp;&nbsp;DESCRIBE&nbsp;TABLE&nbsp;gt_list&nbsp;LINES&nbsp;lv_lines.&nbsp;"herhangi&nbsp;bir&nbsp;internal&nbsp;table&nbsp;daki&nbsp;satýr&nbsp;sayýsýný&nbsp;yakamayý&nbsp;saðlýyor.<br />
+*&nbsp;&nbsp;lv_lines_c&nbsp;=&nbsp;lv_lines.<br />
+<br />
+*&nbsp;&nbsp;ls_header-typ&nbsp;=&nbsp;'A'.&nbsp;"italik&nbsp;olarak&nbsp;gösteriyor.<br />
+**ls_header-info&nbsp;=&nbsp;'Raporda&nbsp;50&nbsp;adet&nbsp;kalem&nbsp;vardýr.'.<br />
+*&nbsp;&nbsp;CONCATENATE&nbsp;'Raporda'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_lines_c<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'adet&nbsp;kalem&nbsp;vardýr.'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;ls_header-info<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;separated&nbsp;by&nbsp;space.&nbsp;"&nbsp;aralara&nbsp;1&nbsp;karakter&nbsp;boþluk&nbsp;býrak.<br />
+*&nbsp;&nbsp;APPEND&nbsp;ls_header&nbsp;TO&nbsp;lt_header.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;"lt_header&nbsp;kullanabilmem&nbsp;için&nbsp;bir&nbsp;fonksiyon&nbsp;kullanmam&nbsp;gerkiyor.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_COMMENTARY_WRITE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_list_commentary&nbsp;=&nbsp;lt_header.<br />
+<br />
+ENDFORM.<br />
+<br />
+<br />
+FORM end_of_list .<br />
+&nbsp;&nbsp;DATA&nbsp;:&nbsp;lt_header&nbsp;TYPE&nbsp;slis_t_listheader,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ls_header&nbsp;TYPE&nbsp;slis_listheader.<br />
+&nbsp;&nbsp;DATA&nbsp;:&nbsp;lv_date&nbsp;TYPE&nbsp;char10.<br />
+&nbsp;&nbsp;DATA&nbsp;:&nbsp;lv_lines&nbsp;&nbsp;&nbsp;TYPE&nbsp;i,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_lines_c&nbsp;TYPE&nbsp;char10.<br />
+<br />
+<br />
+&nbsp;&nbsp;"&nbsp;Buraya&nbsp;kaç&nbsp;satýr&nbsp;kaldýðýný&nbsp;koyduk<br />
+<br />
+&nbsp;&nbsp;CLEAR:&nbsp;ls_header.<br />
+&nbsp;&nbsp;DESCRIBE&nbsp;TABLE&nbsp;gt_list&nbsp;LINES&nbsp;lv_lines.&nbsp;"herhangi&nbsp;bir&nbsp;internal&nbsp;table&nbsp;daki&nbsp;satýr&nbsp;sayýsýný&nbsp;yakalamayý&nbsp;saðlýyor.<br />
+&nbsp;&nbsp;lv_lines_c&nbsp;=&nbsp;lv_lines.<br />
+<br />
+&nbsp;&nbsp;ls_header-typ&nbsp;=&nbsp;'A'.&nbsp;"italik&nbsp;olarak&nbsp;gösteriyor.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;ls_header-info&nbsp;=&nbsp;'Raporda&nbsp;50&nbsp;adet&nbsp;kalem&nbsp;vardýr.'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;CONCATENATE&nbsp;'Raporda'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lv_lines_c<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'adet&nbsp;kalem&nbsp;vardýr.'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;ls_header-info<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SEPARATED&nbsp;BY&nbsp;space.&nbsp;"&nbsp;aralara&nbsp;1&nbsp;karakter&nbsp;boþluk&nbsp;býrak.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_header&nbsp;TO&nbsp;lt_header.<br />
+<br />
+<br />
+<br />
+&nbsp;&nbsp;"lt_header&nbsp;kullanabilmem&nbsp;için&nbsp;bir&nbsp;fonksiyon&nbsp;kullanmam&nbsp;gerkiyor.<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'REUSE_ALV_COMMENTARY_WRITE'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it_list_commentary&nbsp;=&nbsp;lt_header.<br />
+ENDFORM.<br />
+<br />
+<br />
+"Buton Ekleme<br />
+FORM pf_status_set USING p_extab TYPE slis_t_extab .<br />
+&nbsp;&nbsp;SET&nbsp;PF-STATUS&nbsp;'ZSTANDARD'.<br />
+ENDFORM.<br />
+<br />
+<br />
+"HOTSPOT<br />
+FORM user_command USING p_ucomm     TYPE sy-ucomm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ps_selfield&nbsp;TYPE&nbsp;slis_selfield.<br />
+&nbsp;&nbsp;DATA&nbsp;:&nbsp;lv_mes&nbsp;TYPE&nbsp;char200.<br />
+&nbsp;&nbsp;CASE&nbsp;p_ucomm.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'&IC1'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CASE&nbsp;ps_selfield-fieldname.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'BELNR'&nbsp;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;&nbsp;gt_list&nbsp;INTO&nbsp;gs_list&nbsp;INDEX&nbsp;ps_selfield-tabindex.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'BLN'&nbsp;FIELD&nbsp;gs_list-belnr.&nbsp;"belge&nbsp;numarasý<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'BUK'&nbsp;FIELD&nbsp;gs_list-bukrs.&nbsp;"þirket&nbsp;kodu<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'GJR'&nbsp;FIELD&nbsp;gs_list-gjahr.&nbsp;"mali&nbsp;yýl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'FB03'&nbsp;AND&nbsp;SKIP&nbsp;FIRST&nbsp;SCREEN.<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;ps_selfield-value<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'numaralý&nbsp;belge&nbsp;no&nbsp;týklanmýþtýr.'<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;lv_mes<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SEPARATED&nbsp;BY&nbsp;space.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MESSAGE&nbsp;lv_mes&nbsp;TYPE&nbsp;'I'.<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'MATNR'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;READ&nbsp;TABLE&nbsp;&nbsp;gt_list&nbsp;INTO&nbsp;gs_list&nbsp;INDEX&nbsp;ps_selfield-tabindex.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SET&nbsp;PARAMETER&nbsp;ID&nbsp;'MAT'&nbsp;FIELD&nbsp;gs_list-matnr.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;TRANSACTION&nbsp;'MM03'&nbsp;AND&nbsp;SKIP&nbsp;FIRST&nbsp;SCREEN.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ENDCASE.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;WHEN&nbsp;'&LY'.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PERFORM&nbsp;send_mail.<br />
+&nbsp;&nbsp;ENDCASE.<br />
+ENDFORM.<br />
+<br />
+<br />
+"Alv'yi excele çevirip mail atma.<br />
+FORM send_mail.<br />
+<br />
+&nbsp;&nbsp;"Mailin&nbsp;alt&nbsp;bölümünü&nbsp;hazýrlama.<br />
+&nbsp;&nbsp;"itabý&nbsp;diziye(stringe)&nbsp;dönüþtürme.<br />
+&nbsp;&nbsp;LOOP&nbsp;AT&nbsp;gt_list&nbsp;ASSIGNING&nbsp;FIELD-SYMBOL(&lt;gs_list&gt;).&nbsp;"listeyi&nbsp;çekmemiz&nbsp;için&nbsp;alan&nbsp;sembolünü&nbsp;ekledik.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;&lt;gs_list&gt;-kunnr&nbsp;&lt;gs_list&gt;-belnr&nbsp;&lt;gs_list&gt;-buzei&nbsp;&lt;gs_list&gt;-name1&nbsp;&lt;gs_list&gt;-matnr&nbsp;&lt;gs_list&gt;-gjahr&nbsp;&lt;gs_list&gt;-vbeln&nbsp;&lt;gs_list&gt;-aufnr&nbsp;&lt;gs_list&gt;-bukrs&nbsp;"alanlarý&nbsp;birleþtirdik<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;lv_string&nbsp;SEPARATED&nbsp;BY&nbsp;cl_abap_char_utilities=&gt;horizontal_tab.&nbsp;"into&nbsp;ile&nbsp;lv_string&nbsp;deðerine&nbsp;atadýk.&nbsp;SEPARATED&nbsp;BY&nbsp;dan&nbsp;sonrasý&nbsp;excele&nbsp;satýr&nbsp;ve&nbsp;sütün&nbsp;þeklinde&nbsp;indirir.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CONCATENATE&nbsp;lv_string&nbsp;lv_data_string<br />
+&nbsp;&nbsp;&nbsp;&nbsp;INTO&nbsp;lv_data_string&nbsp;SEPARATED&nbsp;BY&nbsp;cl_abap_char_utilities=&gt;newline.<br />
+&nbsp;&nbsp;ENDLOOP.<br />
+<br />
+&nbsp;&nbsp;"string&nbsp;i&nbsp;xstring&nbsp;e&nbsp;dönüþtürme<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'SCMS_STRING_TO_XSTRING'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text&nbsp;&nbsp;&nbsp;=&nbsp;lv_data_string<br />
+&nbsp;&nbsp;&nbsp;&nbsp;IMPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buffer&nbsp;=&nbsp;lv_xstring.<br />
+<br />
+&nbsp;&nbsp;"xstring&nbsp;i&nbsp;binary&nbsp;formatýna&nbsp;çevirme<br />
+&nbsp;&nbsp;CALL&nbsp;FUNCTION&nbsp;'SCMS_XSTRING_TO_BINARY'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buffer&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lv_xstring<br />
+&nbsp;&nbsp;&nbsp;&nbsp;TABLES<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;binary_tab&nbsp;=&nbsp;lt_bin.<br />
+&nbsp;&nbsp;ls_body-line&nbsp;=&nbsp;'Lütfen&nbsp;eki&nbsp;bulun'.<br />
+&nbsp;&nbsp;APPEND&nbsp;ls_body&nbsp;TO&nbsp;lt_body.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*&nbsp;APPEND&nbsp;VALUE&nbsp;#&nbsp;(line&nbsp;=&nbsp;'Lütfen&nbsp;eki&nbsp;bulun')&nbsp;to&nbsp;lt_body.<br />
+<br />
+   </div>
+   <div class="code">
+&nbsp;&nbsp;"Eki&nbsp;ekleme(attachment)<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_document_bcs=&gt;create_document<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_type&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'TXT'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_subject&nbsp;=&nbsp;'Fatura&nbsp;Gönderme'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_text&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_body<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RECEIVING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;DATA(lo_doc).<br />
+<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;lo_doc-&gt;add_attachment<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_attachment_type&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;'XLS'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_attachment_subject&nbsp;=&nbsp;'Excel&nbsp;file'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_att_content_hex&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;lt_bin.<br />
+<br />
+&nbsp;&nbsp;"Örneði&nbsp;oluþturup&nbsp;alma.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_bcs=&gt;create_persistent<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RECEIVING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result&nbsp;=&nbsp;DATA(lo_send_request).<br />
+<br />
+&nbsp;&nbsp;"Belgeyi&nbsp;cl_bcs&nbsp;den&nbsp;ayarla<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;lo_send_request-&gt;set_document<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_document&nbsp;=&nbsp;lo_doc.<br />
+<br />
+&nbsp;&nbsp;"Gönderici&nbsp;oluþtur.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_cam_address_bcs=&gt;create_internet_address<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_address_string&nbsp;=&nbsp;'akcadidem060@gmail.com'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RECEIVING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;DATA(lo_sender).<br />
+<br />
+&nbsp;&nbsp;"Alýcýyý&nbsp;oluþtur.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;cl_cam_address_bcs=&gt;create_internet_address<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_address_string&nbsp;=&nbsp;'akcadidem060@gmail.com'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RECEIVING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&nbsp;DATA(lo_recipient).<br />
+<br />
+&nbsp;&nbsp;"Göndericiyi&nbsp;ayarla.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;lo_send_request-&gt;set_sender<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_sender&nbsp;=&nbsp;lo_sender.<br />
+<br />
+&nbsp;&nbsp;"Alýcý&nbsp;ekle.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;lo_send_request-&gt;add_recipient<br />
+&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_recipient&nbsp;=&nbsp;lo_recipient<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i_express&nbsp;&nbsp;&nbsp;=&nbsp;abap_true.<br />
+<br />
+&nbsp;&nbsp;"Gönder.<br />
+&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;lo_send_request-&gt;send<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RECEIVING<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result&nbsp;=&nbsp;DATA(lv_status).<br />
+<br />
+&nbsp;&nbsp;COMMIT&nbsp;WORK&nbsp;AND&nbsp;WAIT.<br />
+ENDFORM.<br />
+<br />
+   </div>
+   <div class="codeComment">
+*"Prepare&nbsp;Mail&nbsp;Object<br />
+*DATA:&nbsp;&nbsp;LO_SEND_REQUEST&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;CL_BCS&nbsp;VALUE&nbsp;IS&nbsp;INITIAL.<br />
+*CLASS&nbsp;CL_BCS&nbsp;DEFINITION&nbsp;LOAD.<br />
+*DATA:&nbsp;LO_DOCUMENT&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;CL_DOCUMENT_BCS&nbsp;VALUE&nbsp;IS&nbsp;INITIAL.&nbsp;"document&nbsp;object<br />
+*DATA&nbsp;:&nbsp;I_TEXT&nbsp;TYPE&nbsp;BCSY_TEXT.&nbsp;"Table&nbsp;for&nbsp;body<br />
+*DATA&nbsp;:&nbsp;W_TEXT&nbsp;LIKE&nbsp;LINE&nbsp;OF&nbsp;I_TEXT.&nbsp;"work&nbsp;area&nbsp;for&nbsp;message&nbsp;body<br />
+*DATA:&nbsp;LO_SENDER&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;IF_SENDER_BCS&nbsp;VALUE&nbsp;IS&nbsp;INITIAL.&nbsp;"sender<br />
+*DATA:&nbsp;LO_RECIPIENT&nbsp;TYPE&nbsp;REF&nbsp;TO&nbsp;IF_RECIPIENT_BCS&nbsp;VALUE&nbsp;IS&nbsp;INITIAL.&nbsp;"recipient<br />
+***Selection&nbsp;screen<br />
+****PARAMETERS&nbsp;:&nbsp;P_EMAIL&nbsp;TYPE&nbsp;ADR6-SMTP_ADDR.&nbsp;"Emai&nbsp;input<br />
+****PARAMETERS:&nbsp;P_SUB&nbsp;TYPE&nbsp;CHAR50.&nbsp;"email&nbsp;subject<br />
+*<br />
+*&nbsp;&nbsp;LO_SEND_REQUEST&nbsp;=&nbsp;CL_BCS=&gt;CREATE_PERSISTENT(&nbsp;).<br />
+**&nbsp;Message&nbsp;body&nbsp;and&nbsp;subject<br />
+**Set&nbsp;body<br />
+*&nbsp;&nbsp;W_TEXT-LINE&nbsp;=&nbsp;'This&nbsp;is&nbsp;the&nbsp;first&nbsp;tutorial&nbsp;of&nbsp;sending&nbsp;email&nbsp;using&nbsp;SAP&nbsp;ABAP&nbsp;programming&nbsp;by&nbsp;SAPNuts.com'.<br />
+*&nbsp;&nbsp;APPEND&nbsp;W_TEXT&nbsp;TO&nbsp;I_TEXT.<br />
+*&nbsp;&nbsp;CLEAR&nbsp;W_TEXT.<br />
+*&nbsp;&nbsp;W_TEXT-LINE&nbsp;=&nbsp;'SAPNuts.com&nbsp;is&nbsp;the&nbsp;best&nbsp;SAP&nbsp;ABAP&nbsp;learning&nbsp;portal'.<br />
+*&nbsp;&nbsp;APPEND&nbsp;W_TEXT&nbsp;TO&nbsp;I_TEXT.<br />
+*&nbsp;&nbsp;CLEAR&nbsp;W_TEXT.<br />
+*&nbsp;&nbsp;LO_DOCUMENT&nbsp;=&nbsp;CL_DOCUMENT_BCS=&gt;CREATE_DOCUMENT(&nbsp;"create&nbsp;document<br />
+*&nbsp;&nbsp;I_TYPE&nbsp;=&nbsp;'TXT'&nbsp;"Type&nbsp;of&nbsp;document&nbsp;HTM,&nbsp;TXT&nbsp;etc<br />
+*&nbsp;&nbsp;I_TEXT&nbsp;=&nbsp;&nbsp;I_TEXT&nbsp;"email&nbsp;body&nbsp;internal&nbsp;table<br />
+*&nbsp;&nbsp;I_SUBJECT&nbsp;=&nbsp;'mail&nbsp;baslýk'&nbsp;).&nbsp;"email&nbsp;subject&nbsp;here&nbsp;p_sub&nbsp;input&nbsp;parameter<br />
+**&nbsp;Pass&nbsp;the&nbsp;document&nbsp;to&nbsp;send&nbsp;request<br />
+*&nbsp;&nbsp;LO_SEND_REQUEST-&gt;SET_DOCUMENT(&nbsp;LO_DOCUMENT&nbsp;).<br />
+*<br />
+*<br />
+*&nbsp;&nbsp;TRY.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LO_SENDER&nbsp;=&nbsp;CL_SAPUSER_BCS=&gt;CREATE(&nbsp;SY-UNAME&nbsp;).&nbsp;"sender&nbsp;is&nbsp;the&nbsp;logged&nbsp;in&nbsp;user<br />
+**&nbsp;Set&nbsp;sender&nbsp;to&nbsp;send&nbsp;request<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LO_SEND_REQUEST-&gt;SET_SENDER(<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;I_SENDER&nbsp;=&nbsp;LO_SENDER&nbsp;).<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;CATCH&nbsp;CX_ADDRESS_BCS.<br />
+*****Catch&nbsp;exception&nbsp;here<br />
+*&nbsp;&nbsp;ENDTRY.<br />
+***Set&nbsp;recipient<br />
+*&nbsp;&nbsp;LO_RECIPIENT&nbsp;=&nbsp;CL_CAM_ADDRESS_BCS=&gt;CREATE_INTERNET_ADDRESS(&nbsp;'test@test.com'&nbsp;).&nbsp;"Here&nbsp;Recipient&nbsp;is&nbsp;email&nbsp;input&nbsp;p_email<br />
+*&nbsp;&nbsp;TRY.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LO_SEND_REQUEST-&gt;ADD_RECIPIENT(<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_RECIPIENT&nbsp;=&nbsp;LO_RECIPIENT<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_EXPRESS&nbsp;=&nbsp;'X'&nbsp;).<br />
+**&nbsp;&nbsp;CATCH&nbsp;CX_SEND_REQ_BCS&nbsp;INTO&nbsp;BCS_EXCEPTION&nbsp;.<br />
+***Catch&nbsp;exception&nbsp;here<br />
+*&nbsp;&nbsp;ENDTRY.<br />
+*<br />
+**&nbsp;&nbsp;TRY.<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;CALL&nbsp;METHOD&nbsp;LO_SEND_REQUEST-&gt;SET_SEND_IMMEDIATELY<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_SEND_IMMEDIATELY&nbsp;=&nbsp;P_SEND.&nbsp;"here&nbsp;selection&nbsp;screen&nbsp;input&nbsp;p_send<br />
+***&nbsp;&nbsp;&nbsp;&nbsp;CATCH&nbsp;CX_SEND_REQ_BCS&nbsp;INTO&nbsp;BCS_EXCEPTION&nbsp;.<br />
+****Catch&nbsp;exception&nbsp;here<br />
+**&nbsp;&nbsp;ENDTRY.<br />
+*&nbsp;&nbsp;TRY.<br />
+***&nbsp;Send&nbsp;email<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;LO_SEND_REQUEST-&gt;SEND(<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;EXPORTING<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;I_WITH_ERROR_SCREEN&nbsp;=&nbsp;'X'&nbsp;).<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;COMMIT&nbsp;WORK.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;IF&nbsp;SY-SUBRC&nbsp;=&nbsp;0.&nbsp;"mail&nbsp;sent&nbsp;successfully<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WRITE&nbsp;:/&nbsp;'Mail&nbsp;sent&nbsp;successfully'.<br />
+*&nbsp;&nbsp;&nbsp;&nbsp;ENDIF.<br />
+**&nbsp;&nbsp;&nbsp;&nbsp;CATCH&nbsp;CX_SEND_REQ_BCS&nbsp;INTO&nbsp;BCS_EXCEPTION&nbsp;.<br />
+**catch&nbsp;exception&nbsp;here<br />
+*&nbsp;ENDTRY.<br />
+            </div>
+          </td>
+        </tr>
+      </table>
+      </td>
+      </tr>
